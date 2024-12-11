@@ -35,3 +35,32 @@ void Game::intializeGame(void)
 		players[i].displayScore();
 	}
 }
+
+
+/*
+void Game::loopGame()
+{
+	gameState = GAME_LOOP;
+
+	while (gameSate == GAME_LOOP)
+	{
+		// while the current player's turnNo is not equal to zero
+		while ((players[currentPlayer].getTurnsNo() != 0) && (gameSate == GAME_LOOP))
+		{
+			gameState = takeTurn();
+		}
+		// check whether the game has ended or the current player's turn has ended
+		if (gameState == GAME_LOOP)
+		{
+			//shift the turns
+			nextTurn();
+		}
+		// if gameState != GAME_LOOP, this means that the takeTurn() function returned GAME_END
+		// and should exit the loopGame() function
+		else
+		{
+			return;
+		}
+	}
+}
+*/
