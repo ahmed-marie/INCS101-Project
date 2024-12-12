@@ -8,6 +8,7 @@ public:
 	//PenaltyCard();
 	PenaltyCard(int number = 0, bool faceUp = false);
 	~PenaltyCard();
+	void displayCardMessage();
 };
 
 #endif // !PENALTY_CARD

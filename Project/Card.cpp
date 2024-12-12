@@ -4,6 +4,7 @@ Card::Card(int number, bool faceUp)
 {
 	this->number = number;
 	this->faceUp = faceUp;
+	cardType = DEFAULT;
 }
 
 
@@ -45,3 +46,14 @@ void Card::display()
 		cout << "*";
 	}
 }
+
+CARD_TYPE_T Card::getCardType()
+{
+	return cardType;
+}
+/*
+void Card::displayCardMessage()
+{
+	cout << "Parent Card is Revealed!!!" << endl;
+}
+*/

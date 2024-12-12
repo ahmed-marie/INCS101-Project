@@ -8,6 +8,7 @@ public:
 	//StandardCard();
 	StandardCard(int number = 0, bool faceUp = false);
 	~StandardCard();
+	void displayCardMessage();
 };
 
 

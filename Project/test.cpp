@@ -10,7 +10,7 @@
 #include "Player.h"
 #include "Game.h"
 
-
+/*
 void testCardClass(void)
 {
 	// Test 1: Creating a card with an Empty Constructor
@@ -37,6 +37,7 @@ void testCardClass(void)
 	// 5. Testing destructor
 	delete newCard;
 }
+*/
 
 void testStandardCardClass(void)
 {
@@ -60,8 +61,18 @@ void testStandardCardClass(void)
 	// 5. Testing setFaceUp(<bool>) method: Output should be true
 	newCard->setFaceUp(true);
 	newCard->display();
+	cout << endl;
 
-	// 5. Testing destructor
+	// 6. Testing CARD_TYPE_T getCardType();
+	if (newCard->getCardType() == STANDARD)
+		cout << "Test Passed" << endl;
+	else
+		cout << "Test Failed" << endl;
+
+	// 7. Testing Card Message
+	newCard->displayCardMessage();
+
+	// 8. Testing destructor
 	delete newCard;
 }
 
@@ -87,15 +98,25 @@ void testPenaltyCardClass()
 	// 5. Testing setFaceUp(<bool>) method: Output should be true
 	newCard->setFaceUp(true);
 	newCard->display();
+	cout << endl;
 
-	// 5. Testing destructor
+	// 6. Testing CARD_TYPE_T getCardType();
+	if (newCard->getCardType() == PENALTY)
+		cout << "Test Passed" << endl;
+	else
+		cout << "Test Failed" << endl;
+
+	// 7. Testing Card Message
+	newCard->displayCardMessage();
+
+	// 8. Testing destructor
 	delete newCard;
 }
 
 void testBonusCardClass()
 {
 	// Test 1: Creating a card with an Empty Constructor
-	PenaltyCard* newCard = new PenaltyCard;
+	BonusCard* newCard = new BonusCard;
 
 	// 1. Testing getNumber() method: Output should be 0
 	cout << "Card Number: " << newCard->getNumber() << endl;
@@ -114,6 +135,17 @@ void testBonusCardClass()
 	// 5. Testing setFaceUp(<bool>) method: Output should be true
 	newCard->setFaceUp(true);
 	newCard->display();
+	cout << endl;
+
+	// 6. Testing CARD_TYPE_T getCardType();
+	if (newCard->getCardType() == BONUS)
+		cout << "Test Passed" << endl;
+	else
+		cout << "Test Failed" << endl;
+
+	// 7. Testing Card Message
+	newCard->displayCardMessage();
+
 
 	// 5. Testing destructor
 	delete newCard;
@@ -184,6 +216,35 @@ void testPlayerClass(void)
 	// 6. testing displayScore(): expected output -> 5
 	cout << "Testing displayScore()" << endl;
 	p1.displayScore();
+
+	// 7. testing updateScore(int score)
+	cout << "Testing displayScore()" << endl;
+	p1.updateScore(2);
+	p1.displayScore();
+
+	// 8. testing turnsNo setter and getter
+	cout << "turnsNo setter and getter" << endl;
+	cout << "setting turn to 2" << endl;
+	p1.setTurnsNo(2);
+	cout << "printing the turn (getTurnsNo): ";
+	cout << p1.getTurnsNo() << endl;
+	
+	// 9. testing incrementTurn() 
+	cout << "testing incrementTurn()" << endl;
+	p1.incrementTurn(); // turnsNo = 3
+	cout << "printing the turn (getTurnsNo): ";
+	cout << p1.getTurnsNo() << endl;
+	
+	cout << "testing incrementTurn(2)" << endl;
+	p1.incrementTurn(2); // turnsNo = 5
+	cout << "printing the turn (getTurnsNo): ";
+	cout << p1.getTurnsNo() << endl;
+	
+	cout << "testing decrementTurn()" << endl;
+	p1.decrementTurn(); // turnsNo = 4
+	cout << "printing the turn (getTurnsNo): ";
+	cout << p1.getTurnsNo() << endl;
+
 }
 
 void testGameClass(void)
@@ -192,15 +253,15 @@ void testGameClass(void)
 	game.intializeGame();
 }
 
-//int main()
-//{
-//	//testCardClass();
-//	//testStandardCardClass();
-//	//testPenaltyCardClass();
-//	//testBonusCardClass();
-//	//int x = testDeckClass();
-//	//cout << x << endl;
-//	//testPlayerClass();
-//	//testGameClass();
-//	return 0;
-//}
+int main()
+{
+	//testCardClass();
+	//testStandardCardClass();
+	//testPenaltyCardClass();
+	//testBonusCardClass();
+	//int x = testDeckClass();
+	//cout << x << endl;
+	//testPlayerClass();
+	//testGameClass();
+	return 0;
+}
