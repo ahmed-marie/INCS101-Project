@@ -5,5 +5,7 @@ int main()
 {
 	Game game;
 	game.intializeGame();
+	game.gameloop();
+	game.finalizeGame();
 }
 */

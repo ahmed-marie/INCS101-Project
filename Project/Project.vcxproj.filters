@@ -24,9 +24,6 @@
     <ClInclude Include="BonusCard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PenaltyCard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="utilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -37,6 +34,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PenaltyCard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

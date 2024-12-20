@@ -59,6 +59,7 @@ public:
 	CARD_EVENT_T revealCard(int row, int col);
 	REVEALED_CARDS_EVENT_T evaluateFlippedCards();
 
+	CARD_TYPE revealLastCard();
 };
 #endif
 

@@ -285,3 +285,20 @@ REVEALED_CARDS_EVENT_T Deck::evaluateFlippedCards()
 	// return the status
 	return status;
 }
+
+CARD_TYPE_T Deck::revealLastCard()
+{
+	// searching for the last unflipped card
+	// in the deck
+	CARD_TYPE_T card_type;
+	for (int i = 0; i < DECK_SIZE; i++)
+	{
+		if (cardsArr[i] != nullptr)
+		{
+			card_type = cardsArr[i]->getCardType();
+			cardsArr[i]->setFaceUp(true);
+			cardsArr[i]->displayCardMessage();
+			return card_type;
+		}
+	}
+}
