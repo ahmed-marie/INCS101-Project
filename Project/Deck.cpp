@@ -118,6 +118,7 @@ void Deck::displayGrid()
 		}
 		cout << endl;
 	}
+	cout << endl;
 }
 
 bool Deck::isCardExists(int index)
@@ -141,14 +142,23 @@ DECK_STATUS_T Deck::getDeckStatus()
 	}
 }
 
-CARD_EVENT_T  Deck::revealCard(int row, int col)
+CARD_EVENT_T Deck::revealCard(int row, int col)
 {
 	// converts row and col to index. 
 	// row and col have values between 1 and GRID_SIZE inclusive
 	int index = (row - 1) * GRID_SIZE + col - 1; // i * j - 1
+	return revealCard(index);
+}
+
+CARD_EVENT_T Deck::revealCard(int index)
+{
 	if (isCardExists(index) == false)
 	{
 		return CARD_NOT_FOUND;
+	}
+	else if (cardsArr[index]->isFaceUp() == true)
+	{
+		return CARD_REVEALED_BEFORE;
 	}
 	else
 	{
@@ -166,7 +176,7 @@ CARD_EVENT_T  Deck::revealCard(int row, int col)
 		}
 		// display the card's message
 		cardsArr[index]->displayCardMessage();
-		
+
 		return CARD_FOUND;
 	}
 }
@@ -187,7 +197,7 @@ REVEALED_CARDS_EVENT_T Deck::evaluateFlippedCards()
 	// two standard cards: 1. same 7. different
 	if ((card1_type == STANDARD) && (card2_type == STANDARD))
 	{
-		if (card1_ptr->getNumber() == card1_ptr->getNumber())
+		if (card1_ptr->getNumber() == card2_ptr->getNumber())
 		{
 			status = TWO_SAME_STANDARD;
 		}

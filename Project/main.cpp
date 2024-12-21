@@ -1,11 +1,10 @@
-/*
+
 #include "Game.h"
 
 int main()
 {
 	Game game;
 	game.intializeGame();
-	game.gameloop();
+	game.loopGame();
 	game.finalizeGame();
 }
-*/

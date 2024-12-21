@@ -253,15 +253,563 @@ void testGameClass(void)
 	game.intializeGame();
 }
 
+
+int testDeckClass_1(void)
+
+{
+	//initializing a deck
+	Deck deck;
+
+	deck.displayGrid();
+	cout << endl;
+
+	//1. Testing bool isCardExists(int index)
+	cout << "1. Testing isCardExists function" << endl;
+
+	cout << "Case 1: card exists: ";
+	if (deck.isCardExists(0))
+	{
+		cout << "Test Passed" << endl;
+	}
+	else
+	{
+		cout << "Test Failed" << endl;
+	}
+
+	deck.displayGrid();
+	cout << endl;
+
+	cout << "Case 2: Card does not exist: ";
+	// remove the first card in the cardsArr
+	Card** cardsArr = deck.getCardsArr();
+	delete cardsArr[0];
+	cardsArr[0] = nullptr;
+	// printing the test results
+	if (!deck.isCardExists(0))
+	{
+		cout << "Test Passed" << endl;
+	}
+	else
+	{
+		cout << "Test Failed" << endl;
+	}
+
+	deck.displayGrid();
+	cout << endl;
+	
+	//2. Testing CARD_EVENT_T revealCard(int row, int col);
+	cout << "2. Testing revealCard function" << endl;
+	cout << "Case 1: card exists: ";
+	// attempt to reveal the 2nd element in the cardsArr
+	CARD_EVENT_T e;
+	e = deck.revealCard(1, 2);
+	if (e == CARD_FOUND)
+	{
+		cout << "Test Passed" << endl;
+	}
+	else
+	{
+		cout << "Test Failed" << endl;
+	}
+	
+	deck.displayGrid();
+	cout << endl;
+
+	cout << "Case 2: card does not exists: ";
+	// attempt to reveal the 1st element in the cardsArr
+	// which is removed before
+	e = deck.revealCard(1, 1);
+	if (e == CARD_NOT_FOUND)
+	{
+		cout << "Test Passed" << endl;
+	}
+	else
+	{
+		cout << "Test Failed" << endl;
+	}
+
+	deck.displayGrid();
+	cout << endl;
+
+	//2. Testing REVEALED_CARDS_EVENT_T evaluateFlippedCards()
+	cout << "3. Testing evaluateFlippedCards function" << endl;
+	cout << "Case 1: Two Different Standard Cards are flipped: " << endl;
+	// Standard Card 1 is already flipped
+	// Flip Standard Card 2
+	deck.revealCard(1, 3);
+
+	deck.displayGrid();
+	cout << endl;
+
+	// call the evaluateFlippedCards()
+	REVEALED_CARDS_EVENT_T e2;
+	e2 = deck.evaluateFlippedCards();
+	if (e2 == TWO_DIFFERENT_STANDARD)
+	{
+		cout << "Test Passed" << endl;
+	}
+	else
+	{
+		cout << "Test Failed" << endl;
+	}
+	// The grid should be flipped again
+	deck.displayGrid();
+	cout << endl;
+
+
+	// call the evaluateFlippedCards()
+	cout << "Case 2: Two Same Standard Cards are flipped: " << endl;
+	// flip the first card: Standard 2
+	deck.revealCard(1, 3);
+	// flip the second card: Standard 2
+	deck.revealCard(1, 4);
+
+	deck.displayGrid();
+	cout << endl;
+
+	e2 = deck.evaluateFlippedCards();
+	if (e2 == TWO_SAME_STANDARD)
+	{
+		cout << "Test Passed" << endl;
+	}
+	else
+	{
+		cout << "Test Failed" << endl;
+	}
+	// The cards should be removed
+	deck.displayGrid();
+	cout << endl;
+
+	cout << "Case 3: Standard and Bonus Cards are flipped: " << endl;
+	cout << "Case 3.1: First Card Standard, Second Card Bonus" << endl;
+	// flip the first card: Standard 1
+	deck.revealCard(1, 2);
+	// flip the second card: Bonus
+	deck.revealCard(4, 1);
+
+	deck.displayGrid();
+	cout << endl;
+
+	e2 = deck.evaluateFlippedCards();
+	if (e2 == STANDARD_AND_BONUS)
+	{
+		cout << "Test Passed" << endl;
+	}
+	else
+	{
+		cout << "Test Failed" << endl;
+	}
+	// The Bonus card should be removed
+	deck.displayGrid();
+	cout << endl;
+
+
+	cout << "Case 3.2: First Card Bonus, Second Card Standard" << endl;
+	// flip the first card: Standard 1
+	deck.revealCard(4, 2);
+	// flip the second card: Bonus
+	deck.revealCard(1, 2);
+
+	deck.displayGrid();
+	cout << endl;
+
+	e2 = deck.evaluateFlippedCards();
+	if (e2 == STANDARD_AND_BONUS)
+	{
+		cout << "Test Passed" << endl;
+	}
+	else
+	{
+		cout << "Test Failed" << endl;
+	}
+	// The Bonus card should be removed
+	deck.displayGrid();
+	cout << endl;
+
+	cout << "Case 4: Standard and Penalty Cards are flipped: " << endl;
+	cout << "Case 4.1: First Card Standard, Second Card Penalty" << endl;
+	// flip the first card: Standard 3
+	deck.revealCard(2, 1);
+	// flip the second card: Penalty
+	deck.revealCard(4, 3);
+
+	deck.displayGrid();
+	cout << endl;
+
+	e2 = deck.evaluateFlippedCards();
+	if (e2 == STANDARD_AND_PENALTY)
+	{
+		cout << "Test Passed" << endl;
+	}
+	else
+	{
+		cout << "Test Failed" << endl;
+	}
+	// The Penalty card should be removed
+	deck.displayGrid();
+	cout << endl;
+
+
+	cout << "Case 4.2: First Card Bonus, Second Card Standard" << endl;
+	// flip the first card: Penalty
+	deck.revealCard(4, 4);
+	// flip the second card: Standard 3
+	deck.revealCard(2, 2);
+
+	deck.displayGrid();
+	cout << endl;
+
+	e2 = deck.evaluateFlippedCards();
+	if (e2 == STANDARD_AND_PENALTY)
+	{
+		cout << "Test Passed" << endl;
+	}
+	else
+	{
+		cout << "Test Failed" << endl;
+	}
+	// The Penalty card should be removed
+	deck.displayGrid();
+	cout << endl;
+
+	// Testing DECK_STATUS_T getDeckStatus();
+	cout << "Testing getDeckStatus function " << endl;
+	cout << "Case 1: TWO_OR_MORE_CARDS_LEFT case: ";
+
+	DECK_STATUS status;
+	status = deck.getDeckStatus();
+	if (status == TWO_OR_MORE_CARDS_LEFT)
+	{
+		cout << "Test Passed" << endl;
+	}
+	else
+	{
+		cout << "Test Failed" << endl;
+	}
+
+	return 0;
+}
+
+int testDeckClass_2(void)
+{
+	Deck deck;
+	REVEALED_CARDS_EVENT_T e;
+	DECK_STATUS status;
+
+	cout << "3. Testing evaluateFlippedCards function" << endl;
+	cout << "Case 5: Bonus and Penalty Cards are flipped: " << endl;
+	cout << "Case 5.1: First Card Bonus, Second Card Penalty" << endl;
+	// flip the first card: Bonus
+	deck.revealCard(4, 1);
+	// flip the second card: Penalty
+	deck.revealCard(4, 3);
+
+	deck.displayGrid();
+	cout << endl;
+	
+	e = deck.evaluateFlippedCards();
+	if (e == BONUS_AND_PENALTY)
+	{
+		cout << "Test Passed" << endl;
+	}
+	else
+	{
+		cout << "Test Failed" << endl;
+	}
+	// The Bonus card should be removed
+	deck.displayGrid();
+	cout << endl;
+
+	cout << "Case 5.2: First Card Penalty, Second Card Bonus" << endl;
+	// flip the first card: Penalty
+	deck.revealCard(4, 4);
+	// flip the second card: Bonus
+	deck.revealCard(4, 2);
+
+	deck.displayGrid();
+	cout << endl;
+
+	e = deck.evaluateFlippedCards();
+	if (e == BONUS_AND_PENALTY)
+	{
+		cout << "Test Passed" << endl;
+	}
+	else
+	{
+		cout << "Test Failed" << endl;
+	}
+	// The Bonus card should be removed
+	deck.displayGrid();
+	cout << endl;
+
+	cout << "Testing getDeckStatus function " << endl;
+	cout << "Case 2: EMPTY_DECK case: " << endl;
+
+	// reveal the remaining cards except Standard 1
+	deck.revealCard(1, 1);
+	deck.revealCard(1, 2);
+	deck.evaluateFlippedCards();
+
+	deck.revealCard(1, 3);
+	deck.revealCard(1, 4);
+	deck.evaluateFlippedCards();
+	
+	deck.revealCard(2, 1);
+	deck.revealCard(2, 2);
+	deck.evaluateFlippedCards();
+
+	deck.revealCard(2, 3);
+	deck.revealCard(2, 4);
+	deck.evaluateFlippedCards();
+
+	deck.revealCard(3, 1);
+	deck.revealCard(3, 2);
+	deck.evaluateFlippedCards();
+
+	deck.revealCard(3, 3);
+	deck.revealCard(3, 4);
+	deck.evaluateFlippedCards();
+
+	deck.displayGrid();
+
+	
+	status = deck.getDeckStatus();
+	if (status == EMPTY_DECK)
+	{
+		cout << "Test Passed" << endl;
+	}
+	else
+	{
+		cout << "Test Failed" << endl;
+	}
+
+	return 0;
+}
+
+int testDeckClass_3(void)
+{
+	Deck deck;
+	REVEALED_CARDS_EVENT_T e;
+	DECK_STATUS status;
+
+	cout << "3. Testing evaluateFlippedCards function" << endl;
+	cout << "Case 6: TWO Bonus Cards are flipped: " << endl;
+	// flip the first card: Bonus
+	deck.revealCard(4, 1);
+	// flip the second card: Bonus
+	deck.revealCard(4, 2);
+
+	deck.displayGrid();
+	cout << endl;
+
+	e = deck.evaluateFlippedCards();
+	if (e == TWO_BONUS)
+	{
+		cout << "Test Passed" << endl;
+	}
+	else
+	{
+		cout << "Test Failed" << endl;
+	}
+	// The Bonus cards should be removed
+	deck.displayGrid();
+	cout << endl;
+
+	cout << "Case 7: TWO Penalty Cards are flipped: " << endl;
+	// flip the first card: Bonus
+	deck.revealCard(4, 3);
+	// flip the second card: Bonus
+	deck.revealCard(4, 4);
+
+	deck.displayGrid();
+	cout << endl;
+
+	e = deck.evaluateFlippedCards();
+	if (e == TWO_PENALTY)
+	{
+		cout << "Test Passed" << endl;
+	}
+	else
+	{
+		cout << "Test Failed" << endl;
+	}
+	// The Bonus card should be removed
+	deck.displayGrid();
+	cout << endl;
+
+
+	return 0;
+}
+
+int testDeckClass_4(void)
+{
+	Deck deck;
+	REVEALED_CARDS_EVENT_T e;
+	DECK_STATUS status;
+
+	cout << "Testing getDeckStatus function " << endl;
+	cout << "Case 3: ONE_CARD_LEFT case: " << endl;
+
+	// Revealing Standard Cards 1 to 5
+	// standard cards 1
+	deck.revealCard(1, 1);
+	deck.revealCard(1, 2);
+	deck.evaluateFlippedCards();
+
+	// standard cards 2
+	deck.revealCard(1, 3);
+	deck.revealCard(1, 4);
+	deck.evaluateFlippedCards();
+
+	// standard cards 3
+	deck.revealCard(2, 1);
+	deck.revealCard(2, 2);
+	deck.evaluateFlippedCards();
+
+	// standard cards 4
+	deck.revealCard(2, 3);
+	deck.revealCard(2, 4);
+	deck.evaluateFlippedCards();
+
+	// standard cards 5
+	deck.revealCard(3, 1);
+	deck.revealCard(3, 2);
+	deck.evaluateFlippedCards();
+
+	// standard card 6 and bonus
+	deck.revealCard(3, 3);
+	deck.revealCard(4, 1);
+	deck.evaluateFlippedCards();
+
+	// standard cards 6 
+	deck.revealCard(3, 3);
+	deck.revealCard(3, 4);
+	deck.evaluateFlippedCards();
+
+	// penalty cards 
+	deck.revealCard(4, 3);
+	deck.revealCard(4, 4);
+	deck.evaluateFlippedCards();
+
+
+	deck.displayGrid();
+
+
+	status = deck.getDeckStatus();
+	if (status == ONE_CARD_LEFT)
+	{
+		cout << "Test Passed" << endl;
+	}
+	else
+	{
+		cout << "Test Failed" << endl;
+	}
+
+	cout << "Testing revealLastCard function" << endl;
+	cout << "Test Case: Bonus Card: ";
+	
+	if(deck.revealLastCard() == BONUS)
+	{
+		cout << "Test Passed" << endl;
+	}
+	else
+	{
+		cout << "Test Failed" << endl;
+	}
+
+	return 0;
+}
+
+int testDeckClass_5(void)
+{
+	Deck deck;
+	REVEALED_CARDS_EVENT_T e;
+	DECK_STATUS status;
+
+	cout << "Testing getDeckStatus function " << endl;
+	cout << "Case 3: ONE_CARD_LEFT case: " << endl;
+
+	// Revealing Standard Cards 1 to 5
+	// standard cards 1
+	deck.revealCard(1, 1);
+	deck.revealCard(1, 2);
+	deck.evaluateFlippedCards();
+
+	// standard cards 2
+	deck.revealCard(1, 3);
+	deck.revealCard(1, 4);
+	deck.evaluateFlippedCards();
+
+	// standard cards 3
+	deck.revealCard(2, 1);
+	deck.revealCard(2, 2);
+	deck.evaluateFlippedCards();
+
+	// standard cards 4
+	deck.revealCard(2, 3);
+	deck.revealCard(2, 4);
+	deck.evaluateFlippedCards();
+
+	// standard cards 5
+	deck.revealCard(3, 1);
+	deck.revealCard(3, 2);
+	deck.evaluateFlippedCards();
+
+	// standard card 6 and penalty
+	deck.revealCard(3, 3);
+	deck.revealCard(4, 3);
+	deck.evaluateFlippedCards();
+
+	// standard cards 6 
+	deck.revealCard(3, 3);
+	deck.revealCard(3, 4);
+	deck.evaluateFlippedCards();
+
+	// penalty cards 
+	deck.revealCard(4, 1);
+	deck.revealCard(4, 2);
+	deck.evaluateFlippedCards();
+
+
+	deck.displayGrid();
+
+
+	status = deck.getDeckStatus();
+	if (status == ONE_CARD_LEFT)
+	{
+		cout << "Test Passed" << endl;
+	}
+	else
+	{
+		cout << "Test Failed" << endl;
+	}
+
+	cout << "Testing revealLastCard function" << endl;
+	cout << "Test Case: Penalty Card: ";
+
+	if (deck.revealLastCard() == PENALTY)
+	{
+		cout << "Test Passed" << endl;
+	}
+	else
+	{
+		cout << "Test Failed" << endl;
+	}
+
+	return 0;
+}
+
+/*
 int main()
 {
 	//testCardClass();
 	//testStandardCardClass();
 	//testPenaltyCardClass();
 	//testBonusCardClass();
-	//int x = testDeckClass();
+	//int x = testDeckClass_5();
 	//cout << x << endl;
 	//testPlayerClass();
 	//testGameClass();
 	return 0;
 }
+*/

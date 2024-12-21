@@ -27,13 +27,12 @@ void Game::intializeGame(void)
 		players[i].setName(name);
 	}
 	cout << endl;
-	// shuffle the deck
+	//shuffle the deck
 	deck.shuffle();
 
 	// display the deck
 	deck.displayGrid();
 
-	cout << endl;
 	// Display Scores
 	for (int i = 0; i < PLAYER_NUMBERS; i++)
 	{
@@ -93,7 +92,7 @@ TURN_STATE_T Game::evaluateTurn(int& score_ref)
 		}
 		else
 		{
-			score_ref = 0;
+			score_ref = 1;
 			state = BONUS_TURN;
 		}
 		break;
@@ -113,7 +112,7 @@ TURN_STATE_T Game::evaluateTurn(int& score_ref)
 		}
 		else
 		{
-			score_ref = 0;
+			score_ref = -1;
 			state = SKIP_TURN;
 		}
 		break;
@@ -131,18 +130,26 @@ void Game::requestCardFlip()
 	cin >> row;
 	cin >> col;
 	// check if the row and col are inside the range [1 4]
-	while (!((1 <= row) && (row <= 4) && (1 <= row) && (row <= 4)))
+	while (!((1 <= row) && (row <= 4) && (1 <= col) && (col <= 4)))
 	{
 		cout << "Invalid indices. Please enter a valid indices [1 4] [row col]: ";
 		cin >> row;
 		cin >> col;
 	}
 	CARD_EVENT_T card_status = deck.revealCard(row, col);
-	while (card_status == CARD_NOT_FOUND)
+	while (card_status != CARD_FOUND)
 	{
-		cout << "Card is removed. Please enter another indices [1 4] [row col]: ";
+		if (card_status == CARD_NOT_FOUND)
+		{
+			cout << "Card is removed. Please enter another indices [1 4] [row col]: ";
+		}
+		else if (card_status == CARD_REVEALED_BEFORE)
+		{
+			cout << "Card is already revealed. Please enter another indices [1 4] [row col]: ";
+		}
 		cin >> row;
 		cin >> col;
+		card_status = deck.revealCard(row, col);
 	}
 	deck.displayGrid();
 }
@@ -163,6 +170,7 @@ void Game::takeTurn()
 {
 	// decrement the current player's turn 
 	players[currentTurn].decrementTurn();
+	cout << players[currentTurn].getName() << "'s Turn" << endl;
 	// flip the first card
 	requestCardFlip();
 	// flip the second card
@@ -172,6 +180,13 @@ void Game::takeTurn()
 	TURN_STATE_T turn_status = evaluateTurn(score_ref);
 	// update the current's player's score
 	players[currentTurn].updateScore(score_ref);
+
+	// display the players' scores
+	for(int i = 0; i < PLAYER_NUMBERS; i++)
+		players[i].displayScore();
+
+
+	// check the current's player turn status
 	switch (turn_status)
 	{
 		case BONUS_TURN: 
@@ -179,6 +194,7 @@ void Game::takeTurn()
 		case SKIP_TURN:
 			players[currentTurn].decrementTurn(); break;
 		case END_TURN:
+			//players[currentTurn].decrementTurn(); break;
 		default: break;
 	}
 	// check the deck's status
@@ -199,6 +215,7 @@ void Game::takeTurn()
 		case TWO_OR_MORE_CARDS_LEFT:
 			// cards still availabe, game continued
 			gameState = GAME_LOOP;
+			deck.displayGrid();
 			break;
 		default: break;
 	}
@@ -217,8 +234,8 @@ void Game::loopGame()
 
 	while (gameState == GAME_LOOP)
 	{
-		// while the current player's turnNo is not equal to zero
-		while ((players[currentTurn].getTurnsNo() != 0) && (gameState == GAME_LOOP))
+		// while the current player's turnNo is greater than zero
+		while ((players[currentTurn].getTurnsNo() > 0) && (gameState == GAME_LOOP))
 		{
 			takeTurn();
 		}
@@ -255,3 +272,4 @@ void Game::finalizeGame()
 		cout << "Draw!!" << endl;
 	}
 }
+

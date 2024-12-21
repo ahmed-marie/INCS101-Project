@@ -19,7 +19,7 @@
 
 typedef enum CARD_EVENT
 {
-	CARD_NOT_FOUND, CARD_FOUND
+	CARD_NOT_FOUND, CARD_REVEALED_BEFORE, CARD_FOUND
 } CARD_EVENT_T;
 
 typedef enum REVEALED_CARDS_EVENT
@@ -57,9 +57,9 @@ public:
 	bool isCardExists(int index);
 	DECK_STATUS_T getDeckStatus();
 	CARD_EVENT_T revealCard(int row, int col);
+	CARD_EVENT_T revealCard(int index);
 	REVEALED_CARDS_EVENT_T evaluateFlippedCards();
-
-	CARD_TYPE revealLastCard();
+	CARD_TYPE_T revealLastCard();
 };
 #endif
 
